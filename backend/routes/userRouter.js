@@ -6,6 +6,10 @@ const userRouter = express.Router()
 userRouter.post('/signup',async (req, res, next)=>{
     const {name, email, password}=req.body
 try{
+    const user=User.findOne({email :email})
+    if(user){
+        return res.status(403).json({error:"User already registered. Try to login"})
+    }
 const signupuser= new User({
     name : name,
     email : email,
@@ -13,9 +17,11 @@ const signupuser= new User({
 })
 
 await signupuser.save()
+res.status(200).json({message: "Registered successfully."})
 }
 catch(err){
-res.status(400).json({error: "Something went wrong. Please try again later"})
+    console.log("signup err", err)
+res.status(400).json({error: err})
 }
 })
 
@@ -25,14 +31,14 @@ try{
     const user= await User.findOne({email: email});
     if(user.email){
         if(user.password===password){
-            res.status(200).json({message:"Login successful"})
+            return res.status(200).json({message:"Login successful"})
         }
         else{
-            res.status(403).json({error : "Invalid Password"})
+           return res.status(403).json({error : "Invalid Password"})
         }
     }
     else{
-        res.status(403).json({error : "Email Id does not exist. Please register"})
+       return res.status(403).json({error : "Email Id does not exist. Please register"})
     }
 
 }
