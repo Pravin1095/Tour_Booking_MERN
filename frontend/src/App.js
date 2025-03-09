@@ -7,6 +7,7 @@ import Package from './pages/Package';
 import Auth from './pages/Auth';
 import { useCallback, useState } from 'react';
 import { AuthContext } from './common/authContext/authcontext';
+import AdminDashboard from './Admin/AdminDashboard';
 
 function App() {
 const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,6 +44,7 @@ setIsLoggedIn(true);
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Package />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
       </Routes>
       </Router>
       </AuthContext.Provider>

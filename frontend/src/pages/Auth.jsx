@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { AuthContext } from "../common/authContext/authcontext";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import axios from 'axios';
 
 const Auth = () => {
@@ -17,13 +17,14 @@ const Auth = () => {
     const [nameState, setName] = useState('');
     const [emailState, setEmail] = useState('');
     const [passwordState, setPasswordState] = useState('')
+    const navigate = useNavigate()
 
   const submitHandler = async(event) => {
     event.preventDefault(); // Prevents default form submission
     console.log("Form submitted", nameRef.current, emailRef.current, passwordRef.current);
     if(signup){
 try{
-const res = await axios.post(`${url}/signup`,{name : nameRef.current, email:emailRef.current, password: passwordRef.current})
+const res = await axios.post(`${url}/signup`,{name : nameRef.current, email:emailRef.current, password: passwordRef.current, role: "user"})
 
 alert(res.data.message)
 }
@@ -38,6 +39,9 @@ alert(err.response.data.error)
         const res = await axios.post(`${url}/login`,{email:emailRef.current, password: passwordRef.current})
         console.log("check res post", res)
         alert(res.data.message)
+        if(res.data.role==="admin"){
+navigate('/adminDashboard')
+        }
         }catch(err){
         console.log("post signup err", err)
         alert(err.response.data.error)

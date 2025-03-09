@@ -4,16 +4,17 @@ const User = require('../mongoose-models/user_collection')
 const userRouter = express.Router()
 
 userRouter.post('/signup',async (req, res, next)=>{
-    const {name, email, password}=req.body
+    const {name, email, password, role}=req.body
 try{
-    const user=User.findOne({email :email})
+    const user=await User.findOne({email :email})
     if(user){
         return res.status(403).json({error:"User already registered. Try to login"})
     }
 const signupuser= new User({
     name : name,
     email : email,
-    password : password
+    password : password,
+    role : role
 })
 
 await signupuser.save()
@@ -31,7 +32,10 @@ try{
     const user= await User.findOne({email: email});
     if(user.email){
         if(user.password===password){
-            return res.status(200).json({message:"Login successful"})
+            if(user.role==="admin"){
+                return res.status(200).json({message:"Login successful", role:"admin"})
+            }
+            return res.status(200).json({message:"Login successful", role:"user"})
         }
         else{
            return res.status(403).json({error : "Invalid Password"})

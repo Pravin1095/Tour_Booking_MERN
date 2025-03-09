@@ -5,6 +5,7 @@ const mongoose=require('mongoose')
 // const taskRouter=require('./routes/taskRouter')
 const Package=require('./mongoose-models/package_collection')
 const userRouter = require('./routes/userRouter')
+const User = require('./mongoose-models/user_collection')
 
 const url='mongodb://apravin3210:FTfRy9MHfq5wAQF1@cluster0-shard-00-00.g0e5i.mongodb.net:27017,cluster0-shard-00-01.g0e5i.mongodb.net:27017,cluster0-shard-00-02.g0e5i.mongodb.net:27017/?ssl=true&replicaSet=atlas-r9rss6-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0'
 
@@ -54,9 +55,26 @@ app.use('/api/users', userRouter)
 //     }
 // }
 
+const insertAdmin=async()=>{
+    console.log("check if insert is called")
+    if(await User.findOne({role : "admin"})){
+        return
+    }
+    else{
+const adminUser = new User({
+    name: "Admin",
+    email: "admin@example.com",
+    password: "adminsS@t9",
+    role: "admin"
+  })
+  await adminUser.save()
+    }
+}
+
 mongoose.connect(url).then(()=>{
     console.log("Connection successful")
     app.listen(8000);
+    insertAdmin()
     // setInitialPackageData();
 }).catch(err=>{
     console.log('Mongoose connect err', err)
