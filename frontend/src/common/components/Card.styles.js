@@ -9,3 +9,11 @@ grid-gap:10px;
 font-size:24px;
 font-family: Motiva Sans;
 `
+
+export const Title=styled.h3`
+margin:0;
+`
+
+export const Description=styled.div`
+
+`

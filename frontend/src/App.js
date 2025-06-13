@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import NavLinks from './common/components/NavLinks';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Package from './pages/Package';
 import Auth from './pages/Auth';
@@ -19,6 +19,8 @@ setIsLoggedIn(true);
   const setLogout=useCallback(()=>{
     setIsLoggedIn(false)
   },[])
+
+  console.log("isLoggedIn", isLoggedIn)
 
   return (
     <div className="App">
@@ -44,7 +46,8 @@ setIsLoggedIn(true);
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Package />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/adminDashboard" element={<AdminDashboard />} />
+          <Route path="/adminDashboard" element={isLoggedIn ? <AdminDashboard /> : <Navigate to='/auth' replace />  } />
+        
       </Routes>
       </Router>
       </AuthContext.Provider>

@@ -1,6 +1,6 @@
 # Tour_Booking_MERN
 
-MongoDB password : FTfRy9MHfq5wAQF1
+
 
 useCallback:
 
@@ -45,3 +45,18 @@ AbortController.abort():
 Cancels the associated operation and triggers an AbortError.
 AbortController.signal:
 Returns an AbortSignal instance that can be passed to tasks like fetch.
+
+SPA Authentication : 
+
+Basically, currently we are just checking whether the user is logged in or not using login id and password but the server didn't really know if user is authenticated or not and whether he can access a specific rest API.
+We can have two approaches for this we can send a session from server to client and that session we can store in a cookie but since the API is stateless (decoupled from frontend) it doesn't require to remember sessions and to what session the frontend belongs to. So we use another method of generating tokens from server which we can store in local storage/cookies in frontend. This token can be attached by the frontend to requests that request protected resources. The server generates the token with a certain algorithm. A private key is passed to the algorithm and with data it genetates a token and for different key with same data it generates another token. 
+So when frontend try to access requests a protected API the server validates this token and grants access.
+And with this approcah we no need to store any data on the server except for this private key we then know which token makes sense for this private key
+
+Hashing passwords:
+
+It is not advised to store the password that user is sending as it is instead we need to encrypt those so that when our database is compromised by hackers the password won't be available to them. So we hash our passwords and we use the npm package bcryptjs
+
+JWT : 
+
+To generate token we need to install a package named jsonwebtoken. We use the method sign in jwt where we pass the first argument as the data that we want to encode within the generated token, The 2nd argument is super important which is the private key that we don't want to share to anyone. If user finds this somehow then it will be compromised and he can access user data. The 3rd argument is the time for which the token expires and new one to be generated

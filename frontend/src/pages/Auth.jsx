@@ -19,6 +19,7 @@ const Auth = () => {
     const [passwordState, setPasswordState] = useState('')
     const navigate = useNavigate()
 
+    console.log("authLogin", auth.isLoggedIn)
   const submitHandler = async(event) => {
     event.preventDefault(); // Prevents default form submission
     console.log("Form submitted", nameRef.current, emailRef.current, passwordRef.current);
@@ -39,6 +40,7 @@ alert(err.response.data.error)
         const res = await axios.post(`${url}/login`,{email:emailRef.current, password: passwordRef.current})
         console.log("check res post", res)
         alert(res.data.message)
+        auth.login()
         if(res.data.role==="admin"){
 navigate('/adminDashboard')
         }
