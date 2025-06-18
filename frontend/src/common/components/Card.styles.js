@@ -8,6 +8,7 @@ grid-template-columns: 2fr 1fr;
 grid-gap:10px;
 font-size:24px;
 font-family: Motiva Sans;
+cursor : pointer;
 `
 
 export const Title=styled.h3`

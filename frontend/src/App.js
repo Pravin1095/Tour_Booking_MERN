@@ -8,6 +8,8 @@ import Auth from './pages/Auth';
 import { useCallback, useState } from 'react';
 import { AuthContext } from './common/authContext/authcontext';
 import AdminDashboard from './Admin/AdminDashboard';
+import AddTour from './Admin/AddTours';
+import ManageTour from './Admin/ManageTours';
 
 function App() {
 const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +49,8 @@ setIsLoggedIn(true);
         <Route path="/packages" element={<Package />} />
         <Route path="/auth" element={<Auth />} />
           <Route path="/adminDashboard" element={isLoggedIn ? <AdminDashboard /> : <Navigate to='/auth' replace />  } />
-        
+        <Route path="/adminDashboard/addPackage" element={<AddTour />} />
+        <Route path="/adminDashboard/managePackage" element={<ManageTour />} />
       </Routes>
       </Router>
       </AuthContext.Provider>
