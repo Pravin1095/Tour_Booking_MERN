@@ -12,17 +12,18 @@ import AddTour from './Admin/AddTours';
 import ManageTour from './Admin/ManageTours';
 
 function App() {
-const [isLoggedIn, setIsLoggedIn] = useState(false);
+const [token, setToken] = useState('');
 
-  const setLogin=useCallback(()=>{
-setIsLoggedIn(true);
+
+  const setLogin=useCallback((uid, token)=>{
+setToken(token);
   },[])
 
   const setLogout=useCallback(()=>{
-    setIsLoggedIn(false)
+    setToken(false)
   },[])
 
-  console.log("isLoggedIn", isLoggedIn)
+  console.log("isLoggedIn", token)
 
   return (
     <div className="App">
@@ -41,14 +42,14 @@ setIsLoggedIn(true);
         </a>
 
       </header> */}
-      <AuthContext.Provider value={{isLoggedIn : isLoggedIn, login: setLogin, logout : setLogout}}>
+      <AuthContext.Provider value={{isLoggedIn : !!token, token : token, login: setLogin, logout : setLogout}}>
       <Router>
         <NavLinks />
         <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Package />} />
         <Route path="/auth" element={<Auth />} />
-          <Route path="/adminDashboard" element={isLoggedIn ? <AdminDashboard /> : <Navigate to='/auth' replace />  } />
+          <Route path="/adminDashboard" element={token ? <AdminDashboard /> : <Navigate to='/auth' replace />  } />
         <Route path="/adminDashboard/addPackage" element={<AddTour />} />
         <Route path="/adminDashboard/managePackage" element={<ManageTour />} />
       </Routes>

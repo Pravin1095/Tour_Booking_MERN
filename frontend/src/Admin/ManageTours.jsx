@@ -1,9 +1,10 @@
-import React, { useEffect , useState} from 'react'
+import React, { useEffect , useState, useContext} from 'react'
 import { ActionButton, ButtonRow, Card, Container, Description, InfoRow, Title } from './ManageTour.styles'
 import axios from 'axios'
 import { Button, FormContainer, FormGroup, Input, Label, TextArea } from './AddTours.styles';
 import AddTour from './AddTours';
 import DeleteModal from './DeleteModal';
+import { AuthContext } from '../common/authContext/authcontext';
 
 const ManageTour = ()=>{
     const [packages, setPackages] = useState([]);
@@ -11,12 +12,16 @@ const ManageTour = ()=>{
     const [editablePkg, setEditablePkg] = useState('');
     const [openDeleteModal, setOpenDeleteModal] = useState('');
 const url = 'http://localhost:8000/api/admin/package'
+const auth = useContext(AuthContext);
     useEffect(()=>{
 getPackageData()
     },[])
 
     const getPackageData =async ()=>{
-const res = await axios.get(`${url}`)
+const res = await axios.get(`${url}`,{
+  headers:{
+    Authorization : `Bearer ` + auth.token
+  }})
 console.log('res', res?.data?.getPackage)
 setPackages(res?.data?.getPackage)
 

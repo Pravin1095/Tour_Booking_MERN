@@ -2,6 +2,7 @@ const express=require('express')
 const app=express()
 const bodyParser=require('body-parser')
 const mongoose=require('mongoose')
+const bcrypt = require('bcryptjs')
 // const taskRouter=require('./routes/taskRouter')
 const Package=require('./mongoose-models/package_collection')
 const userRouter = require('./routes/userRouter')
@@ -64,10 +65,12 @@ const insertAdmin=async()=>{
         return
     }
     else{
+        let hashedPassword;
+        hashedPassword = await bcrypt.hash('adminsS@t9', 12)
 const adminUser = new User({
     name: "Admin",
     email: "admin@example.com",
-    password: "adminsS@t9",
+    password: hashedPassword,
     role: "admin"
   })
   await adminUser.save()

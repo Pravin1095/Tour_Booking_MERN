@@ -3,6 +3,10 @@ const Package = require('../mongoose-models/package_collection')
 
 const adminRouter = express.Router()
 
+const checkAuth = require('../middleWares/check-auth');
+
+adminRouter.use(checkAuth);
+
 
 adminRouter.get('/',async(req, res, next)=>{
     try{

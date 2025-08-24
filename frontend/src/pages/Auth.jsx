@@ -26,7 +26,7 @@ const Auth = () => {
     if(signup){
 try{
 const res = await axios.post(`${url}/signup`,{name : nameRef.current, email:emailRef.current, password: passwordRef.current, role: "user"})
-
+ auth.login(res.data.userId, res.data.token)
 alert(res.data.message)
 }
 
@@ -40,7 +40,7 @@ alert(err.response.data.error)
         const res = await axios.post(`${url}/login`,{email:emailRef.current, password: passwordRef.current})
         console.log("check res post", res)
         alert(res.data.message)
-        auth.login()
+        auth.login(res.data.userId, res.data.token)
         if(res.data.role==="admin"){
 navigate('/adminDashboard')
         }

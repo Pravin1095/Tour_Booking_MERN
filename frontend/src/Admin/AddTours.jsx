@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import { Button, ButtonContainer, CancelButton, FormContainer, FormGroup, Input, Label, TextArea, Title } from './AddTours.styles';
 import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../common/authContext/authcontext';
 
 const AddTour = (props)=>{
 
+  const auth = useContext(AuthContext)
     const url = 'http://localhost:8000/api/admin/package'
     const [formData, setFormData] = useState({
         name : '',
@@ -33,7 +36,10 @@ const AddTour = (props)=>{
     }
     console.log("check formValues", updatedFormData, id)
     try{
- const res = await axios.patch(`${url}/${id}`,updatedEditData)
+ const res = await axios.patch(`${url}/${id}`,updatedEditData,{
+  headers:{
+    Authorization : `Bearer ` + auth.token
+  }})
      alert(res.data.message)
     }
     catch(error){
@@ -44,7 +50,10 @@ const AddTour = (props)=>{
   }
   else{
     try{
- const res = await axios.post(`${url}`,updatedFormData)
+ const res = await axios.post(`${url}`,updatedFormData,{
+  headers:{
+    Authorization : `Bearer ` + auth.token
+  }})
   alert(res.data.message)
     }
     catch(err){
@@ -70,7 +79,7 @@ console.log("check formData", updatedFormData)
             setDestination(value)
         }
         else{
-setFormData({...formData, [name] : value})
+setFormData(prev=>({...prev, [name] : value}))
         }
          
     }
