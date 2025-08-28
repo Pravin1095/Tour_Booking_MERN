@@ -5,8 +5,9 @@ const mongoose=require('mongoose')
 const bcrypt = require('bcryptjs')
 // const taskRouter=require('./routes/taskRouter')
 const Package=require('./mongoose-models/package_collection')
-const userRouter = require('./routes/userRouter')
+const authRouter = require('./routes/authRouter')
 const adminRouter = require('./routes/adminRouter')
+const userRouter = require('./routes/userRouter');
 const User = require('./mongoose-models/user_collection')
 
 const url='mongodb://apravin3210:FTfRy9MHfq5wAQF1@cluster0-shard-00-00.g0e5i.mongodb.net:27017,cluster0-shard-00-01.g0e5i.mongodb.net:27017,cluster0-shard-00-02.g0e5i.mongodb.net:27017/?ssl=true&replicaSet=atlas-r9rss6-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0'
@@ -24,8 +25,9 @@ app.use((req, res, next)=>{
     next()
 })
 
-app.use('/api/users', userRouter)  
-app.use('/api/admin/package', adminRouter)
+app.use('/api/auth', authRouter)  
+app.use('/api/admin/package', adminRouter) 
+app.use('/api/user', userRouter)
 
 // app.use('/api/tasks', taskRouter)
 

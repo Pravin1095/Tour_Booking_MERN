@@ -3,10 +3,11 @@ import { AuthContext } from "../common/authContext/authcontext";
 import { useContext, useState } from "react";
 import { Link , useNavigate} from "react-router-dom";
 import axios from 'axios';
+import { Button, Card, Input, Label, Toggle, Wrapper } from "./Auth.styles";
 
 const Auth = () => {
     const auth = useContext(AuthContext)
-    const url = 'http://localhost:8000/api/users'
+    const url = 'http://localhost:8000/api/auth'
 
     const [signup, setSignUp] = useState(false)
     // const [regUserValues, setRegUserValues] = useState({})
@@ -26,7 +27,7 @@ const Auth = () => {
     if(signup){
 try{
 const res = await axios.post(`${url}/signup`,{name : nameRef.current, email:emailRef.current, password: passwordRef.current, role: "user"})
- auth.login(res.data.userId, res.data.token)
+ auth.login(res.data.userId, res.data.token, "user")
 alert(res.data.message)
 }
 
@@ -40,9 +41,12 @@ alert(err.response.data.error)
         const res = await axios.post(`${url}/login`,{email:emailRef.current, password: passwordRef.current})
         console.log("check res post", res)
         alert(res.data.message)
-        auth.login(res.data.userId, res.data.token)
+        auth.login(res.data.userId, res.data.token, res.data.role);
         if(res.data.role==="admin"){
 navigate('/adminDashboard')
+        }
+        else if(res.data.role==="user"){
+navigate('/userDashboard')
         }
         }catch(err){
         console.log("post signup err", err)
@@ -79,22 +83,60 @@ switch(name){
   }
 console.log("check values", nameState, emailState, passwordState)
   return (
-    <>
-    <Link onClick={()=>setSignUp(true)}>Sign up</Link> or <Link onClick={()=>setSignUp(false)}>Sign in</Link>
-    <form onSubmit={submitHandler}>
-      {signup && <><label>Name:</label>
-      <input onChange={handleChange} value={nameState} type="text" name="name" /></>}
+    <Wrapper>
+      <Card>
+        <Toggle>
+          <button
+            onClick={() => setSignUp(false)}
+            className={!signup ? "active" : ""}
+          >
+            Sign In
+          </button>
+          <button
+            onClick={() => setSignUp(true)}
+            className={signup ? "active" : ""}
+          >
+            Sign Up
+          </button>
+        </Toggle>
 
-      <label>Email:</label>
-      <input onChange={handleChange} value={emailState} type="email" name="email" />
+        <form onSubmit={submitHandler}>
+          {signup && (
+            <>
+              <Label>Name</Label>
+              <Input
+                onChange={handleChange}
+                value={nameState}
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+              />
+            </>
+          )}
+          <Label>Email</Label>
+          <Input
+            onChange={handleChange}
+            value={emailState}
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+          />
 
-      <label>Password:</label>
-      <input onChange={handleChange} value={passwordState} type="password" name="password" />
+          <Label>Password</Label>
+          <Input
+            onChange={handleChange}
+            value={passwordState}
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+          />
 
-      <button type="submit">{signup ? "Sign up" : "Sign in"}</button>
-    </form>
-    </>
+          <Button type="submit">{signup ? "Sign Up" : "Sign In"}</Button>
+        </form>
+      </Card>
+    </Wrapper>
   );
+
 };
 
 export default Auth;
